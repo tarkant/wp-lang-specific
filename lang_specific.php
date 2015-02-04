@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Language Specific Block Shortcode
+ * Plugin Name: WP Lang Specific
  * Plugin URI: https://github.com/tarkant/wp-lang-specific
  * Description: WP Lang Specific enables you to show specific blocks of content following the language of the browser used by the visitor using simple shortcodes.
  * Version: 1.0.0
