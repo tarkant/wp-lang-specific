@@ -9,16 +9,56 @@
  * License: GPL2
  */
 
-// Add Shortcode
-function lang_shortcode( $atts , $content = null ) {
-	$lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-	// Attributes
-	extract( shortcode_atts(
-		array(
-			'language' => '',
-		), $atts )
-	);
-	if(strcasecmp ($lang ,$language )==0) return $content;
-	else return null;
+class WpLangSpecific {
+
+    function __construct()
+    {
+        $this->register_shortcode();
+    }
+
+    /**
+     * @param $string_one
+     * @param $string_two
+     * @return boolean
+     */
+    function compare($string_one, $string_two)
+    {
+        return (strtolower($string_one) == strtolower($string_two));
+    }
+
+    /**
+     * @param $atts
+     * @param null $content
+     * @return null|string
+     */
+    function shortcode( $atts , $content = null ) {
+        $client_language = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+
+        // Attributes
+        /** @var string $language */
+        /** @var string $fallback */
+        extract( shortcode_atts(
+                array(
+                    'language' => '',
+                    'fallback' => '',
+                ), $atts )
+        );
+
+        if($this->compare($client_language ,$language ))
+        {
+            return $content;
+        }
+        else
+        {
+            return $fallback;
+        }
+    }
+
+    function register_shortcode()
+    {
+        add_shortcode( 'lang', [$this, 'shortcode'] );
+    }
 }
-add_shortcode( 'lang', 'lang_shortcode' );
+
+/** @var WpLangSpecific $lang_specific */
+$lang_specific = new WpLangSpecific();
